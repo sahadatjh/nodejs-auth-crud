@@ -35,6 +35,24 @@ const findUser = (email) => {
     return user;
 }
 
+function userUpdate(req, res) {
+    const { firstName, lastName } = req.body;
+    const { email } = req.params;
+
+    const user = findUser(email);
+
+    if(!user) return res.status(400).send("User not found");
+
+    user.firstName = firstName;
+    user.lastName = lastName;
+
+    const modifyedUser = { ...user };
+    delete modifyedUser.password;
+
+    return res.status(202).send(modifyedUser);
+}
+
 module.exports.home = home;
 module.exports.createUser = createUser;
+module.exports.userUpdate = userUpdate;
 module.exports.findUser = findUser;

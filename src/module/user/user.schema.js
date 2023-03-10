@@ -23,4 +23,18 @@ const createUserSchema = object().shape({
         .oneOf([ref('password'), null], "Password and confirm password must be matched!")
 });
 
+const updateUserSchema = object().shape({
+    firstName: string()
+        .required()
+        .min(2)
+        .max(100),
+    lastName: string()
+        .required()
+        .min(2)
+        .max(100)
+});
+
+
+
 module.exports.createUserSchema = createUserSchema;
+module.exports.updateUserSchema = updateUserSchema;
