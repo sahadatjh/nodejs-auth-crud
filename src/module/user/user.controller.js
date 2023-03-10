@@ -5,6 +5,14 @@ function home(req, res) {
     res.status(200).send('Welcome to our homepage!');
 }
 
+function getUsers(req, res) {
+    const allUsers = users.map(user => ({ ...user }))
+
+    allUsers.map(user => delete user.password);
+
+    res.status(200).send(allUsers);
+}
+
 function createUser(req, res) {  
     const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -54,5 +62,6 @@ function userUpdate(req, res) {
 
 module.exports.home = home;
 module.exports.createUser = createUser;
+module.exports.getUsers = getUsers;
 module.exports.userUpdate = userUpdate;
 module.exports.findUser = findUser;
