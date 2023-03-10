@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const users = [];
 
@@ -43,6 +44,36 @@ const findUser = (email) => {
     return user;
 }
 
+function login(req, res) {
+    const { email, password } = req.body;
+
+    const user = findUser(email);
+
+    if(!user) return res.status(401).send('Invalid credentials!');
+    
+    const matchedPassword = bcrypt.compareSync(password, user.password);
+    
+    if(!matchedPassword) return res.status(401).send('Invalid credentials!');
+
+    const token = jwt.sign({ 
+            firstName: user.firstName, 
+            lastName: user.lastName, 
+            email: user.lastName 
+        }, 
+        'jwt security key for create token', 
+        { 
+            expiresIn:'1h', 
+            issuer: user.email 
+        });
+        
+    const modifyedUser = { ...user };
+    delete modifyedUser.password;
+
+    res.cookie("access_token", token, { httpOnly: true, signed: true });
+
+    res.status(200).send(modifyedUser);
+}
+
 function userUpdate(req, res) {
     const { firstName, lastName } = req.body;
     const { email } = req.params;
@@ -65,3 +96,6 @@ module.exports.createUser = createUser;
 module.exports.getUsers = getUsers;
 module.exports.userUpdate = userUpdate;
 module.exports.findUser = findUser;
+module.exports.login = login;
+
+

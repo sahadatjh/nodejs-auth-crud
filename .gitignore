@@ -1,3 +1,4 @@
 .yarn
 .pnp.cjs
 .env
+node_modules/

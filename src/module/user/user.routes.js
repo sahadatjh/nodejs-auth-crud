@@ -1,5 +1,5 @@
 const validate = require( "../core/middlewares/validate" );
-const { home, createUser, userUpdate, getUsers } = require( "./user.controller" );
+const { home, createUser, userUpdate, getUsers, login } = require( "./user.controller" );
 const { createUserSchema, updateUserSchema } = require( "./user.schema" );
 
 module.exports = (app) => {
@@ -11,4 +11,6 @@ module.exports = (app) => {
     
     app.route('/users/:email')
         .patch(validate(updateUserSchema), userUpdate);
+
+    app.post('/users/login', login);
 }
