@@ -1,8 +1,10 @@
-const { home, createUser } = require( "./user.controller" )
+const validate = require( "../core/middlewares/validate" );
+const { home, createUser } = require( "./user.controller" );
+const { createUserSchema } = require( "./user.schema" );
 
 module.exports = (app) => {
     app.get('/', home);
 
     app.route('/users')
-        .post(createUser);
+        .post(validate(createUserSchema), createUser);
 }
